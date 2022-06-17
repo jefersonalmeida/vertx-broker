@@ -1,7 +1,9 @@
 package com.jefersonalmeida.vertx.broker.assets;
 
 import com.jefersonalmeida.vertx.broker.MainVerticle;
+import io.netty.handler.codec.http.HttpHeaderValues;
 import io.vertx.core.Vertx;
+import io.vertx.core.http.HttpHeaders;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.client.WebClientOptions;
 import io.vertx.junit5.VertxExtension;
@@ -36,6 +38,10 @@ public class TestAssetsRestApi {
           json.encode()
         );
         assertEquals(200, response.statusCode());
+        assertEquals(
+          HttpHeaderValues.APPLICATION_JSON.toString(),
+          response.getHeader(HttpHeaders.CONTENT_TYPE.toString())
+        );
         context.completeNow();
       }));
   }
