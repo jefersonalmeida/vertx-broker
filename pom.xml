@@ -18,6 +18,8 @@
 
     <vertx.version>4.3.1</vertx.version>
     <junit-jupiter.version>5.7.0</junit-jupiter.version>
+    <logback-classic.version>1.2.11</logback-classic.version>
+    <jackson-databind.version>2.13.3</jackson-databind.version>
 
     <main.verticle>com.jefersonalmeida.vertx.broker.MainVerticle</main.verticle>
     <launcher.class>io.vertx.core.Launcher</launcher.class>
@@ -42,9 +44,15 @@
     </dependency>
 
     <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>${jackson-databind.version}</version>
+    </dependency>
+
+    <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
-      <version>1.2.11</version>
+      <version>${logback-classic.version}</version>
     </dependency>
 
     <dependency>

@@ -2,9 +2,12 @@ package com.jefersonalmeida.vertx.broker;
 
 import com.jefersonalmeida.vertx.broker.assets.AssetsRestApi;
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.Handler;
 import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
+import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
+import io.vertx.ext.web.RoutingContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,6 +31,7 @@ public class MainVerticle extends AbstractVerticle {
   public void start(Promise<Void> startPromise) {
 
     final Router restApi = Router.router(vertx);
+    restApi.route().failureHandler(handleFailure());
     AssetsRestApi.attach(restApi);
 
     vertx.createHttpServer()
@@ -41,5 +45,18 @@ public class MainVerticle extends AbstractVerticle {
           startPromise.fail(http.cause());
         }
       });
+  }
+
+  private Handler<RoutingContext> handleFailure() {
+    return errorContext -> {
+      if (errorContext.response().ended()) {
+        // Ignore completed response
+        return;
+      }
+      LOG.error("Router error:", errorContext.failure());
+      errorContext.response()
+        .setStatusCode(500)
+        .end(new JsonObject().put("message", "Something went wrong :(").toBuffer());
+    };
   }
 }
