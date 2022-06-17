@@ -1,8 +1,10 @@
-package com.jefersonalmeida.vertx.vertx_stock_broker;
+package com.jefersonalmeida.vertx.broker;
 
+import com.jefersonalmeida.vertx.broker.assets.AssetsRestApi;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
+import io.vertx.ext.web.Router;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,16 +26,20 @@ public class MainVerticle extends AbstractVerticle {
 
   @Override
   public void start(Promise<Void> startPromise) {
-    vertx.createHttpServer().requestHandler(req ->
-      req.response()
-        .putHeader("content-type", "text/plain")
-        .end("Hello from Vert.x!")).listen(8888, http -> {
-      if (http.succeeded()) {
-        startPromise.complete();
-        LOG.info("HTTP server started on port 8888");
-      } else {
-        startPromise.fail(http.cause());
-      }
-    });
+
+    final Router restApi = Router.router(vertx);
+    AssetsRestApi.attach(restApi);
+
+    vertx.createHttpServer()
+      .requestHandler(restApi)
+      .exceptionHandler(error -> LOG.error("HTTP server error: ", error))
+      .listen(8888, http -> {
+        if (http.succeeded()) {
+          startPromise.complete();
+          LOG.info("HTTP server started on port 8888");
+        } else {
+          startPromise.fail(http.cause());
+        }
+      });
   }
 }
