@@ -20,6 +20,7 @@
     <junit-jupiter.version>5.7.0</junit-jupiter.version>
     <logback-classic.version>1.2.11</logback-classic.version>
     <jackson-databind.version>2.13.3</jackson-databind.version>
+    <lombok.version>1.18.24</lombok.version>
 
     <main.verticle>com.jefersonalmeida.vertx.broker.MainVerticle</main.verticle>
     <launcher.class>io.vertx.core.Launcher</launcher.class>
@@ -58,6 +59,13 @@
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
       <version>${logback-classic.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>${lombok.version}</version>
+      <scope>provided</scope>
     </dependency>
 
     <dependency>

@@ -1,4 +1,8 @@
 package com.jefersonalmeida.vertx.broker.assets;
 
-public record Asset(String name) {
+import lombok.Value;
+
+@Value
+public class Asset {
+  String name;
 }
