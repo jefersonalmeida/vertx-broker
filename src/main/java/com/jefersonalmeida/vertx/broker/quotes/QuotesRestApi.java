@@ -2,12 +2,15 @@ package com.jefersonalmeida.vertx.broker.quotes;
 
 import com.jefersonalmeida.vertx.broker.assets.Asset;
 import com.jefersonalmeida.vertx.broker.assets.AssetsRestApi;
+import io.netty.handler.codec.http.HttpResponseStatus;
+import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class QuotesRestApi {
@@ -24,8 +27,19 @@ public class QuotesRestApi {
       final var assetParam = context.pathParam("asset");
       LOG.debug("Asset parameter: {}", assetParam);
 
-      final var quote = cachedQuotes.get(assetParam);
-      final var response = quote.toJsonObject();
+      final var aQuote = Optional.ofNullable(cachedQuotes.get(assetParam));
+      if (aQuote.isEmpty()) {
+        context.response()
+          .setStatusCode(HttpResponseStatus.NOT_FOUND.code())
+          .end(new JsonObject()
+            .put("message", "Quote for asset " + assetParam + " not available!")
+            .put("path", context.normalizedPath())
+            .toBuffer()
+          );
+        return;
+      }
+
+      final var response = aQuote.get().toJsonObject();
       LOG.info("Path {} responds with {}", context.normalizedPath(), response.encode());
       context.response().end(response.toBuffer());
 

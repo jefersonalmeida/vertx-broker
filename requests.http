@@ -1,2 +1,5 @@
-### assets
+### Assets
 GET http://localhost:8888/assets
+
+### Quote
+GET http://localhost:8888/quotes/MSFT
