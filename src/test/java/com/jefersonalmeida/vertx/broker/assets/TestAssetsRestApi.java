@@ -42,6 +42,7 @@ public class TestAssetsRestApi {
           HttpHeaderValues.APPLICATION_JSON.toString(),
           response.getHeader(HttpHeaders.CONTENT_TYPE.toString())
         );
+        assertEquals("my-value", response.getHeader("my-header"));
         context.completeNow();
       }));
   }
