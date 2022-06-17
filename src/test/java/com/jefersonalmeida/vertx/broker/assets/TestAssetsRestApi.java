@@ -32,7 +32,7 @@ public class TestAssetsRestApi {
         final var json = response.bodyAsJsonArray();
         LOG.info("response: {}", json);
         assertEquals(
-          "[{\"name\":\"AAPL\"},{\"name\":\"AMZN\"},{\"name\":\"NFLX\"},{\"name\":\"TSLA\"}]",
+          "[{\"name\":\"AAPL\"},{\"name\":\"AMZN\"},{\"name\":\"NFLX\"},{\"name\":\"TSLA\"},{\"name\":\"FB\"},{\"name\":\"GOOG\"},{\"name\":\"MSFT\"}]",
           json.encode()
         );
         assertEquals(200, response.statusCode());
