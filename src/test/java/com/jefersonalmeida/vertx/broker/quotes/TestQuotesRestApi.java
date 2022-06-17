@@ -1,4 +1,4 @@
-package com.jefersonalmeida.vertx.broker.assets;
+package com.jefersonalmeida.vertx.broker.quotes;
 
 import com.jefersonalmeida.vertx.broker.MainVerticle;
 import io.vertx.core.Vertx;
@@ -15,8 +15,8 @@ import org.slf4j.LoggerFactory;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(VertxExtension.class)
-public class TestAssetsRestApi {
-  private static final Logger LOG = LoggerFactory.getLogger(TestAssetsRestApi.class);
+public class TestQuotesRestApi {
+  private static final Logger LOG = LoggerFactory.getLogger(TestQuotesRestApi.class);
 
   @BeforeEach
   void deploy_verticle(Vertx vertx, VertxTestContext context) {
@@ -24,17 +24,14 @@ public class TestAssetsRestApi {
   }
 
   @Test
-  void return_all_assets(Vertx vertx, VertxTestContext context) {
+  void return_quote_for_asset(Vertx vertx, VertxTestContext context) {
     final var client = WebClient.create(vertx, new WebClientOptions().setDefaultPort(MainVerticle.PORT));
-    client.get("/assets")
+    client.get("/quotes/AMZN")
       .send()
       .onComplete(context.succeeding(response -> {
-        final var json = response.bodyAsJsonArray();
+        final var json = response.bodyAsJsonObject();
         LOG.info("response: {}", json);
-        assertEquals(
-          "[{\"name\":\"AAPL\"},{\"name\":\"AMZN\"},{\"name\":\"NFLX\"},{\"name\":\"TSLA\"}]",
-          json.encode()
-        );
+        assertEquals("{\"name\":\"AMZN\"}", json.getJsonObject("asset").encode());
         assertEquals(200, response.statusCode());
         context.completeNow();
       }));
