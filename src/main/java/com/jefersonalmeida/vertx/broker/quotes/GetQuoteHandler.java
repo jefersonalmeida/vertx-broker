@@ -1,8 +1,7 @@
 package com.jefersonalmeida.vertx.broker.quotes;
 
-import io.netty.handler.codec.http.HttpResponseStatus;
+import com.jefersonalmeida.vertx.broker.db.DBResponse;
 import io.vertx.core.Handler;
-import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.RoutingContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,13 +24,7 @@ public class GetQuoteHandler implements Handler<RoutingContext> {
 
     final var aQuote = Optional.ofNullable(cachedQuotes.get(assetParam));
     if (aQuote.isEmpty()) {
-      context.response()
-        .setStatusCode(HttpResponseStatus.NOT_FOUND.code())
-        .end(new JsonObject()
-          .put("message", "Quote for asset " + assetParam + " not available!")
-          .put("path", context.normalizedPath())
-          .toBuffer()
-        );
+      DBResponse.notFoundResponse(context, "Quote for asset " + assetParam + " not available!");
       return;
     }
 

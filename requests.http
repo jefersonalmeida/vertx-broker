@@ -1,5 +1,11 @@
 ### Assets
 GET http://localhost:8888/assets
 
+### Assets DB
+GET http://localhost:8888/pg/assets
+
 ### Quote
-GET http://localhost:8888/quotes/MSFT
+GET http://localhost:8888/quotes/TSLA
+
+### Quote DB
+GET http://localhost:8888/pg/quotes/AMZN

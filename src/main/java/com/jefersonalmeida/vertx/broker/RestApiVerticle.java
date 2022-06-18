@@ -14,6 +14,7 @@ import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.pgclient.PgConnectOptions;
 import io.vertx.pgclient.PgPool;
+import io.vertx.sqlclient.Pool;
 import io.vertx.sqlclient.PoolOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +44,7 @@ public class RestApiVerticle extends AbstractVerticle {
       .failureHandler(handleFailure());
 
     AssetsRestApi.attach(router, db);
-    QuotesRestApi.attach(router);
+    QuotesRestApi.attach(router, db);
     WatchListRestApi.attach(router);
 
     vertx.createHttpServer()
@@ -59,7 +60,7 @@ public class RestApiVerticle extends AbstractVerticle {
       });
   }
 
-  private PgPool createDbPool(BrokerConfig configuration) {
+  private Pool createDbPool(final BrokerConfig configuration) {
     final var connectOptions = new PgConnectOptions()
       .setHost(configuration.getDbConfig().getHost())
       .setPort(configuration.getDbConfig().getPort())
@@ -67,8 +68,9 @@ public class RestApiVerticle extends AbstractVerticle {
       .setUser(configuration.getDbConfig().getUser())
       .setPassword(configuration.getDbConfig().getPassword());
 
-    final var poolOptions = new PoolOptions()
-      .setMaxSize(4);
+    final var poolOptions = new PoolOptions().setMaxSize(4);
+
+//    LOG.debug("createDbPool: {}", connectOptions.toJson());
 
     return PgPool.pool(vertx, connectOptions, poolOptions);
   }
