@@ -1,5 +1,6 @@
 package com.jefersonalmeida.vertx.broker;
 
+import com.jefersonalmeida.vertx.broker.config.ConfigLoader;
 import io.vertx.core.Vertx;
 import io.vertx.junit5.VertxExtension;
 import io.vertx.junit5.VertxTestContext;
@@ -12,6 +13,7 @@ public class TestMainVerticle {
 
   @BeforeEach
   void deploy_verticle(Vertx vertx, VertxTestContext testContext) {
+    System.setProperty(ConfigLoader.SERVER_PORT, "8889");
     vertx.deployVerticle(new MainVerticle(), testContext.succeeding(id -> testContext.completeNow()));
   }
 
