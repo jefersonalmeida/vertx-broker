@@ -3,6 +3,11 @@
     <option name="ALTERNATIVE_JRE_PATH" value="17"/>
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true"/>
     <envs>
+      <env name="DB_DATABASE" value="vertx_stock_broker"/>
+      <env name="DB_HOST" value="host.docker.internal"/>
+      <env name="DB_PASSWORD" value="postgres"/>
+      <env name="DB_PORT" value="5432"/>
+      <env name="DB_USER" value="postgres"/>
       <env name="SERVER_PORT" value="8888"/>
     </envs>
     <option name="MAIN_CLASS_NAME" value="com.jefersonalmeida.vertx.broker.MainVerticle"/>
