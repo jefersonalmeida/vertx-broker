@@ -16,7 +16,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class RestApiVerticle extends AbstractVerticle {
-
   private static final Logger LOG = LoggerFactory.getLogger(RestApiVerticle.class);
 
   @Override

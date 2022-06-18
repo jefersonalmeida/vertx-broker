@@ -13,11 +13,10 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 public class ConfigLoader {
-
   private static final Logger LOG = LoggerFactory.getLogger(ConfigLoader.class);
-
   public static final String SERVER_PORT = "SERVER_PORT";
   public static final List<String> EXPOSED_ENVIRONMENT_VARIABLES = List.of(SERVER_PORT);
+  public static final String CONFIG_FILE = "application.yml";
 
   public static Future<BrokerConfig> load(Vertx vertx) {
 
@@ -34,9 +33,15 @@ public class ConfigLoader {
       .setType("sys")
       .setConfig(new JsonObject().put("cache", false));
 
+    final var yamlStore = new ConfigStoreOptions()
+      .setType("file")
+      .setFormat("yaml")
+      .setConfig(new JsonObject().put("path", CONFIG_FILE));
+
     final var retriever = ConfigRetriever.create(
       vertx,
       new ConfigRetrieverOptions()
+        .addStore(yamlStore)
         .addStore(propertyStore)
         .addStore(envStore)
     );
