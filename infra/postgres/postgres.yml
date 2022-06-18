@@ -1,0 +1,22 @@
+version: '3.7'
+
+services:
+
+  db:
+    image: postgres:14-alpine
+    environment:
+      # Create db
+      POSTGRES_DB: vertx_stock_broker
+      # Use postgres/secret user/password credentials
+      POSTGRES_PASSWORD: postgres
+      # enforce UTC timezone
+      TZ: UTC
+    volumes:
+      - vertx-stock-broker-data-local:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+# permanent storage of data.
+# > docker volume rm postgres_vertx-stock-broker-data-local
+volumes:
+  vertx-stock-broker-data-local:
