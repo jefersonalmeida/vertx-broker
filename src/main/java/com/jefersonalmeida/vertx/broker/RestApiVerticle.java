@@ -12,6 +12,9 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.BodyHandler;
+import io.vertx.pgclient.PgConnectOptions;
+import io.vertx.pgclient.PgPool;
+import io.vertx.sqlclient.PoolOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,13 +33,16 @@ public class RestApiVerticle extends AbstractVerticle {
   }
 
   private void startHttpServerAndAttachRoutes(Promise<Void> startPromise, BrokerConfig configuration) {
-    final var router = Router.router(vertx);
 
+    // One pool for each Rest Api Verticle
+    final var db = createDbPool(configuration);
+
+    final var router = Router.router(vertx);
     router.route()
       .handler(BodyHandler.create())
       .failureHandler(handleFailure());
 
-    AssetsRestApi.attach(router);
+    AssetsRestApi.attach(router, db);
     QuotesRestApi.attach(router);
     WatchListRestApi.attach(router);
 
@@ -51,6 +57,20 @@ public class RestApiVerticle extends AbstractVerticle {
           startPromise.fail(http.cause());
         }
       });
+  }
+
+  private PgPool createDbPool(BrokerConfig configuration) {
+    final var connectOptions = new PgConnectOptions()
+      .setHost(configuration.getDbConfig().getHost())
+      .setPort(configuration.getDbConfig().getPort())
+      .setDatabase(configuration.getDbConfig().getDatabase())
+      .setUser(configuration.getDbConfig().getUser())
+      .setPassword(configuration.getDbConfig().getPassword());
+
+    final var poolOptions = new PoolOptions()
+      .setMaxSize(4);
+
+    return PgPool.pool(vertx, connectOptions, poolOptions);
   }
 
   private Handler<RoutingContext> handleFailure() {
