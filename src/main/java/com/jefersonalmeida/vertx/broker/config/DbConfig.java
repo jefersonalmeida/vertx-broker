@@ -6,11 +6,11 @@ import lombok.Value;
 @Value
 @Builder
 public class DbConfig {
-  String host = "host.docker.internal";
-  Integer port = 5432;
-  String database = "vertx_stock_broker";
-  String user = "postgres";
-  String password = "postgres";
+  String host;
+  Integer port;
+  String database;
+  String user;
+  String password;
 
   @Override
   public String toString() {

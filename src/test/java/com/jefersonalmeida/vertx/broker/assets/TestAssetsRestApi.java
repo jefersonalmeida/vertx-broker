@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-
 public class TestAssetsRestApi extends AbstractRestApiTest {
   private static final Logger LOG = LoggerFactory.getLogger(TestAssetsRestApi.class);
 

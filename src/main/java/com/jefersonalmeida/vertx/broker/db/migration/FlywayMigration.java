@@ -17,6 +17,7 @@ public class FlywayMigration {
   private static final Logger LOG = LoggerFactory.getLogger(FlywayMigration.class);
 
   public static Future<Void> migrate(Vertx vertx, DbConfig config) {
+    LOG.debug("DB Config: {}", config);
     return vertx
       .<Void>executeBlocking(promise -> {
         // Flyway migration is blocking => uses JDBC
