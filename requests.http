@@ -17,7 +17,7 @@ GET http://localhost:8888/account/watchlist/d8f7386a-9b33-4765-98f4-ea2fda341b45
 GET http://localhost:8888/pg/account/watchlist/d8f7386a-9b33-4765-98f4-ea2fda341b45
 
 ### Watchlist Insert
-PUT http://localhost:8888/pg/account/watchlist/42175fed-f58f-4a36-8a70-228f1060f785
+PUT http://localhost:8888/pg/account/watchlist/d8f7386a-9b33-4765-98f4-ea2fda341b45
 Content-Type: application/json
 
 {
@@ -33,3 +33,7 @@ Content-Type: application/json
     }
   ]
 }
+
+### Watchlist Delete
+DELETE http://localhost:8888/pg/account/watchlist/d8f7386a-9b33-4765-98f4-ea2fda341b45
+Content-Type: application/json
