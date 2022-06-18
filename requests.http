@@ -9,3 +9,9 @@ GET http://localhost:8888/quotes/TSLA
 
 ### Quote DB
 GET http://localhost:8888/pg/quotes/AMZN
+
+### Wathlist
+GET http://localhost:8888/account/watchlist/d8f7386a-9b33-4765-98f4-ea2fda341b45
+
+### Wathlist DB
+GET http://localhost:8888/pg/account/watchlist/d8f7386a-9b33-4765-98f4-ea2fda341b45

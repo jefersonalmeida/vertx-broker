@@ -34,7 +34,7 @@ public class GetQuoteFromDatabaseHandler implements Handler<RoutingContext> {
       .onSuccess(quotes -> {
 
         if (!quotes.iterator().hasNext()) {
-          DBResponse.notFoundResponse(context, "Quote for asset " + assetParam + " not available!");
+          DBResponse.notFound(context, "Quote for asset " + assetParam + " not available!");
         }
 
         final var response = quotes.iterator().next().toJsonObject();

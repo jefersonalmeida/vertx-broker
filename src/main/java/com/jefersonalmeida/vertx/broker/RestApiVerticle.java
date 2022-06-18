@@ -45,7 +45,7 @@ public class RestApiVerticle extends AbstractVerticle {
 
     AssetsRestApi.attach(router, db);
     QuotesRestApi.attach(router, db);
-    WatchListRestApi.attach(router);
+    WatchListRestApi.attach(router, db);
 
     vertx.createHttpServer()
       .requestHandler(router)

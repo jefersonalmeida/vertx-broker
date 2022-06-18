@@ -24,7 +24,7 @@ public class GetQuoteHandler implements Handler<RoutingContext> {
 
     final var aQuote = Optional.ofNullable(cachedQuotes.get(assetParam));
     if (aQuote.isEmpty()) {
-      DBResponse.notFoundResponse(context, "Quote for asset " + assetParam + " not available!");
+      DBResponse.notFound(context, "Quote for asset " + assetParam + " not available!");
       return;
     }
 

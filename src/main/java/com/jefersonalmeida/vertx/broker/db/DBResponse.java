@@ -26,7 +26,7 @@ public class DBResponse {
     };
   }
 
-  public static void notFoundResponse(RoutingContext context, String message) {
+  public static void notFound(RoutingContext context, String message) {
     context.response()
       .setStatusCode(HttpResponseStatus.NOT_FOUND.code())
       .end(new JsonObject()
