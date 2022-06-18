@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class PutWatchListFromDatabaseHandler implements Handler<RoutingContext> {
   private static final Logger LOG = LoggerFactory.getLogger(PutWatchListFromDatabaseHandler.class);
@@ -26,25 +27,28 @@ public class PutWatchListFromDatabaseHandler implements Handler<RoutingContext> 
     final var json = context.body().asJsonObject();
     final var watchList = json.mapTo(WatchList.class);
 
-    watchList.getAssets().forEach(asset -> {
 
-      final var parameters = new HashMap<String, Object>();
-      parameters.put("account_id", accountId);
-      parameters.put("asset", asset.getName());
+    final var parameterBatch = watchList.getAssets().stream()
+      .map(asset -> {
+        final Map<String, Object> parameters = new HashMap<>();
+        parameters.put("account_id", accountId);
+        parameters.put("asset", asset.getName());
+        return parameters;
+      })
+      .toList();
 
-      SqlTemplate.forUpdate(db,
-          "INSERT INTO broker.watchlist VALUES (#{account_id}, #{asset})"
-        )
-        .execute(parameters)
-        .onFailure(DBResponse.errorHandler(context, "Failed to insert into watchlist for accountId %s".formatted(accountId)))
-        .onSuccess(result -> {
-          if (!context.response().ended()) {
-            context.response()
-              .setStatusCode(HttpResponseStatus.NO_CONTENT.code())
-              .end();
-          }
-        })
-      ;
-    });
+
+    // Only adding is possible -> Entries for watch list are never removed
+    SqlTemplate.forUpdate(db,
+        "INSERT INTO broker.watchlist VALUES (#{account_id}, #{asset})"
+          + " ON CONFLICT (account_id, asset) DO NOTHING"
+      )
+      .executeBatch(parameterBatch)
+      .onFailure(DBResponse.errorHandler(context, "Failed to insert into watchlist for accountId %s".formatted(accountId)))
+      .onSuccess(result -> context.response()
+        .setStatusCode(HttpResponseStatus.NO_CONTENT.code())
+        .end()
+      );
+
   }
 }
