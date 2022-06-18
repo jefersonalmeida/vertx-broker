@@ -17,7 +17,7 @@ GET http://localhost:8888/account/watchlist/d8f7386a-9b33-4765-98f4-ea2fda341b45
 GET http://localhost:8888/pg/account/watchlist/d8f7386a-9b33-4765-98f4-ea2fda341b45
 
 ### Watchlist Insert
-PUT http://localhost:8888/pg/account/watchlist/d8f7386a-9b33-4765-98f4-ea2fda341b45
+PUT http://localhost:8888/pg/account/watchlist/100
 Content-Type: application/json
 
 {
@@ -26,14 +26,7 @@ Content-Type: application/json
       "name": "TSLA"
     },
     {
-      "name": "AMZN"
-    },
-    {
       "name": "AAPL"
     }
   ]
 }
-
-### Watchlist Delete
-DELETE http://localhost:8888/pg/account/watchlist/d8f7386a-9b33-4765-98f4-ea2fda341b45
-Content-Type: application/json

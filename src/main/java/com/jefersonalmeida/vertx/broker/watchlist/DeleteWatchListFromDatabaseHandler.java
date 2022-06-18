@@ -24,7 +24,7 @@ public class DeleteWatchListFromDatabaseHandler implements Handler<RoutingContex
     final var accountId = WatchListRestApi.getAccountId(context);
 
     SqlTemplate.forUpdate(db,
-        "DELETE FROM broker.watchlist where account_id=#{account_id}"
+        "DELETE FROM broker.watchlist w where w.account_id = #{account_id}"
       )
       .execute(Collections.singletonMap("account_id", accountId))
       .onFailure(DBResponse.errorHandler(context, "Failed to delete watchlist for accountId %s".formatted(accountId)))
